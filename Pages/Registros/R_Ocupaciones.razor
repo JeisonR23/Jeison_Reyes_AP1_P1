@@ -1,0 +1,99 @@
+@page "/R_Ocupaciones"
+@page "/R_Ocupaciones/{OcupacionId:int}"
+@inject OcupacionesBLL ocupacionesBLL;
+
+<EditForm Model="ocupacion" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+
+    <h3>Registro de Ocupaciones</h3>
+
+
+    <label>Descripcion</label>
+    <InputText @bind-Value="ocupacion.Descripcion"></InputText>
+    <ValidationMessage For="@(() => ocupacion.Descripcion)" />
+
+    <label>Salario</label>
+    <InputNumber @bind-Value="ocupacion.Salario"></InputNumber>
+    <ValidationMessage For="@(() => ocupacion.Descripcion)" />
+
+
+    <button type="button" @onclick="Nuevo">Nuevo</button>
+    <button type="submit">Guardar</button>
+    <button type="button" @onclick="Eliminar">Eliminar</button>
+
+</EditForm>
+
+
+@code
+{
+    [Parameter]
+
+    public int OcupacionId { get; set; }
+
+    public Ocupaciones ocupacion { get; set; } = new Ocupaciones();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+    }
+    public void Nuevo()
+    {
+        ocupacion = new Ocupaciones();
+
+    }
+
+    private void Buscar()
+    {
+        if (ocupacion.OcupacionId > 0)
+        {
+            var encontrado = ocupacionesBLL.Buscar(ocupacion.OcupacionId);
+            Buscar();
+            if (encontrado != null)
+            {
+                this.ocupacion = encontrado;
+
+            }
+            else
+            {
+                Console.Write("No se pudo encontrar");
+            }
+
+        }
+
+    }
+
+    public void Guardar()
+    {
+        var guardado = ocupacionesBLL.Guardar(ocupacion);
+        if (guardado)
+        {
+            Nuevo();
+
+        }
+        else
+        {
+            Console.Write("No se Guardo");
+        }
+
+    }
+
+    public void Eliminar()
+    {
+        bool eliminado;
+        eliminado = false;
+        if (eliminado)
+        {
+            Nuevo();
+            // toast.ShowInfo("La tarea se elimino correctamente");
+        }
+        else
+        {
+            // toast.ShowWarning("La tarea no se elimino");
+        }
+
+    }
+
+
+
+}

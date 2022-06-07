@@ -1,0 +1,66 @@
+@page "/C_Ocupaciones"
+@inject OcupacionesBLL ocupacionesBLL;
+
+<EditForm Model="lista">
+    <DataAnnotationsValidator />
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Consulta de Ocupaciones</h3>
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="input-group d-flex align-items-end">
+                    <select class="form-control col-2" @bind="Filtro">
+                        <option value="1">OcupacionId</option>
+                        <option value="2">Descripcion</option>
+                    </select>
+
+                    <div class="flex-fill mx-2">
+                        <label>Criterio</label>
+                        <input type="text" class="form-control" @bind="Criterio">
+                    </div>
+
+                    <button type="button" class="btn btn-warning" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2" > Buscar </i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-secondary">
+            <thead class="thead dask">
+                <tr class="table-info">
+                    <th>OcupacionId</th>
+                    <th>Descripcion</th>
+                    <th>Salario</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lista)
+                {
+                    <tr>
+                        <td>@item.OcupacionId</td>
+                        <td>@item.Descripcion</td>
+                        <td>@item.Salario</td>
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+    </div>
+</EditForm>
+
+@code
+{
+    public string Filtro { get; set; }
+    public string Criterio { get; set; }
+    public List<Ocupaciones> lista { get; set; } = new List<Ocupaciones>();
+
+    private void Buscar()
+    {
+        lista = ocupacionesBLL.GetOcupaciones();
+
+    }
+
+}
